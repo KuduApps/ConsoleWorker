@@ -7,7 +7,7 @@ namespace ConsoleWorker
     {
         private static void Main(string[] args)
         {
-            File.WriteAllText("verification.txt", "Verified!!!");
+            File.AppendAllText("..\\..\\..\\LogFiles\\verification.txt", "Verified!!!\n");
             Console.WriteLine("Verification file written");
         }
     }
