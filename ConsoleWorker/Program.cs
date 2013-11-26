@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 namespace ConsoleWorker
@@ -8,21 +9,19 @@ namespace ConsoleWorker
     {
         private static void Main(string[] args)
         {
-            string path = Path.Combine(Environment.GetEnvironmentVariable("WEBROOT_PATH"), "\\..\\..\\LogFiles\\verification.txt");
+            string path = Environment.GetEnvironmentVariable("WEBROOT_PATH") + "\\..\\..\\LogFiles\\verification.txt";
             using (var fs = File.Open(path, FileMode.Append, FileAccess.Write, FileShare.Read | FileShare.Delete))
             {
-                using (var sw = new StreamWriter(fs))
+                byte[] bytes = Encoding.UTF8.GetBytes("Verified!!!" + Environment.NewLine);
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Flush(true);
+
+                Console.WriteLine("Verification file written");
+
+                // Keep file locked until process ends
+                while (true)
                 {
-                    sw.WriteLine("Verified!!!");
-                    sw.Flush();
-
-                    Console.WriteLine("Verification file written");
-
-                    // Keep file locked until process ends
-                    while (true)
-                    {
-                        Thread.Sleep(1000);
-                    }
+                    Thread.Sleep(1000);
                 }
             }
         }
